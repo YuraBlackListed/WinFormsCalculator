@@ -33,22 +33,47 @@ namespace WinForms
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            int result = GetNumbers().Item1 + GetNumbers().Item2;
-            string message = $"Result: {result}";
-            MessageBox.Show(message, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            try
+            {
+                var numbers = GetNumbers();
+                int result = numbers.Item1 + numbers.Item2;
+                string message = $"Result: {result}";
+                MessageBox.Show(message, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            int result = GetNumbers().Item1 * GetNumbers().Item2;
-            string message = $"Result: {result}";
-            MessageBox.Show(message, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            try
+            {
+                var numbers = GetNumbers();
+                int result = numbers.Item1 * numbers.Item2;
+                string message = $"Result: {result}";
+                MessageBox.Show(message, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
         private (int, int) GetNumbers()
         {
-            int x = int.Parse(textBox1.Text);
-            int y = int.Parse(textBox2.Text);
+            int x, y;
+            if (!int.TryParse(textBox1.Text, out x))
+            {
+                throw new ArgumentException("Invalid input for first number. Please enter a valid number.");
+            }
+
+            if (!int.TryParse(textBox2.Text, out y))
+            {
+                throw new ArgumentException("Invalid input for second number. Please enter a valid number.");
+            }
+
             return (x, y);
         }
     }
